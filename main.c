@@ -17,6 +17,7 @@ int main(){
 	void *memoria_partilhada = (void *) 0;
 	int *pisoactual; //guarda o piso aonde se encontra
 	int shmid;
+	int sem1; //acesso 
 	//int valor;
 	shmid = shmget(1000, sizeof(int), 0666|IPC_CREAT); //cria a memoria partilhada
 	if (shmid == -1) {
@@ -44,17 +45,13 @@ int main(){
 		if((pidv[i]=fork())==0){
 			sprintf(str, "%d", i);
 			execlp("xterm", "xterm", "-e", "./piso", str, NULL);
-			exit(0);
 		}
-
 	}
-	
-	sleep(2);
 
-for(i=0; i<pisos; i++){
-	wait(NULL);
-}
+while(1){
+		execlp("xterm", "xterm", "-e", "./menu", argv[1], NULL); //chama o teclado
 
+}		
 //teste ao vetor de pedidos
 memoria_partilhada=shmat(shmid,(void *)0,0);
 pedidos=(int *)memoria_partilhada;
